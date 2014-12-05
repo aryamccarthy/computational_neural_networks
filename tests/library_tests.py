@@ -1,6 +1,6 @@
 from nose.tools import *
 import library
-import library.adjacency_graph
+import library.graph
 import library.ode
 
 
@@ -51,5 +51,5 @@ class TestAdjacencyMake(object):
     # Scale coupling strength with number of cells.
     wexc = 0.2 / NN
 
-    cgraph = library.adjacency_graph.MakeAdjacencyGraph(NN, "all", 0, wexc)
+    cgraph = library.graph.MakeAdjacencyGraph(NN, "all", 0, wexc)
     print cgraph
