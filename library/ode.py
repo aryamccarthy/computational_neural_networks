@@ -51,3 +51,36 @@ class RK4_Integrator(Integrator):
 
     x_next = x + dt*(k1 + 2*k2 + 2*k3 + k4)/6
     return x_next
+
+
+def vector_with_step_size(start, end, step_size):
+  """
+  From documentation on np.arange: 
+  When using a non-integer step, such as 0.1, the results will often not 
+  be consistent. It is better to use linspace for these cases.
+
+  That's why we're wrapping np.linspace to take the args for np.arange.
+  """
+  num_intervals = int(np.round((end-start)/step_size))
+  return np.linspace(start, end, num_intervals + 1)
+
+
+def simple_object_timestepper(integrator, xI, tI, tF, dt):
+  # Establish dimensions of the ODE system.
+  dim = len(xI)
+
+  # Time vector
+  t = vector_with_step_size(tI, tF, dt)
+
+  # Initialize storage.
+  x = np.empty((len(t), dim))
+  # coeff_list = []
+  x[0,:] = xI
+
+  # Run the solver.
+  for n in xrange(len(t)):
+    x_next = integrator.step(t[n], x[n,:], dt)
+    x[n+1, :] = x_next # Update next column of entries
+
+  return t, x
+
